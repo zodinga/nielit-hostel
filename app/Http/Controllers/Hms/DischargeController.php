@@ -61,6 +61,12 @@ class DischargeController extends Controller
         $roomRents=roomRent::where('hosteller_id',$id)->orderby('from')->get();
         $messFees=messFee::where('hosteller_id',$id)->orderby('month_year')->get();
 
+        //Admit fee pending
+        $admit_pending="";
+        if(!$admitFees->first())
+            $admit_pending="Not paid";
+        //
+
         //calculate room rent pending
         $admit=$hosteller->admitFee;
         if($hosteller->messFee)
@@ -81,19 +87,9 @@ class DischargeController extends Controller
 
             $start = date('Y-m-d',$time);
         }
-        
-        $pending="";
-        echo "<br>Start:",date('m/Y',strtotime($start));
-        while(date('m/Y',strtotime($start))-date('m/Y',strtotime($roomRents->first()->from))>0){
-            echo "<br>Misus:",date('m/Y',strtotime($start))-date('m/Y',strtotime($roomRents->first()->from));
-            $pending=$pending.date('m/Y',strtotime($start))." to ".date('m/Y',strtotime( "+5 month", strtotime( $start ) )).', ';
-            $start=date('m/d/Y',strtotime( "+6 month", strtotime( $start ) )); 
-            echo "<br>Start:",date('m/Y',strtotime($start));
-            echo "<br>DB First:",date('m/Y',strtotime($roomRents->first()->from));
-            echo "<br>Misus:",date('m/Y',strtotime($start))-date('m/Y',strtotime($roomRents->first()->from));
-        }
-        echo "<br>Pending:",$pending;
+
         $today=date(\Carbon\Carbon::now());
+        
         if(date('m',strtotime($today))<6){
             $time = strtotime('6/30/'.date('Y',strtotime($today)));
             $end = date('Y-m-d',$time);
@@ -102,63 +98,95 @@ class DischargeController extends Controller
             $time = strtotime('12/31/'.date('Y',strtotime($today)));
             $end = date('Y-m-d',$time);
         }
-        //dd($end);
-        $i=0;
-        foreach($roomRents as $roomRent)
-            $rent[$i++]=$roomRent->to;
-        //dd($rent);
 
-        $j=0;
-        for(;date('m/Y',strtotime($rent[$j]))<=date('m/Y',strtotime($end));)
+        $pending="";
+
+        if($roomRents->first())
         {
-            echo "<br>Rent:",date('m/Y',strtotime($rent[$j]));
+            while(date('m/Y',strtotime($start))!=date('m/Y',strtotime($roomRents->first()->from))){
+            $pending=$pending.date('m/Y',strtotime($start))." to ".date('m/Y',strtotime( "+5 month", strtotime( $start ) )).', ';
+            $start=date('m/d/Y',strtotime( "+6 month", strtotime( $start ) )); 
+            }
+        
+        
+            
+            $i=0;
+            foreach($roomRents as $roomRent)
+                $rent[$i++]=$roomRent->from;
 
-            $j++;
+            $j=0;
+
+            while(date('Y',strtotime( $start ))<=date('Y',strtotime($today)))
+            {
+                if($i==1 && date('Y',strtotime( $start ))===date('Y',strtotime($today)) && date('m/Y',strtotime( $start ))==date('m/Y',strtotime( $rent[0] )))
+                    break;
+                if($j<$i)
+                {
+                    if(date('m/Y',strtotime($start))==date('m/Y',strtotime($rent[$j])))
+                    {
+                        $j++;
+                        $start=date('m/d/Y',strtotime( "+6 month", strtotime( $start ) ));
+                    }
+                    else
+                    {
+                        $pending=$pending.date('m/Y',strtotime($start)).' to '.date('m/Y',strtotime( "+5 month", strtotime( $start ))).', ';
+                        $start=date('m/d/Y',strtotime( "+6 month", strtotime( $start ) ));
+                    }
+                }
+
+            }
         }
-
-        dd();
-        /*foreach($roomRents as $roomRent)
-        {
-            if(date('m/Y',strtotime($roomRent->from))==date('m/Y',strtotime($start))&&date('m/Y',strtotime($roomRent->to))==date('m/Y',strtotime( "+5 month", strtotime( $start ) ))){
+        else{
+            while(date('m',strtotime( $start ))<=date('m',strtotime($today))&&date('Y',strtotime( $start ))<=date('Y',strtotime($today)))
+            {
+                $pending=$pending.date('m/Y',strtotime($start)).' to '.date('m/Y',strtotime( "+5 month", strtotime( $start ))).', ';
                 $start=date('m/d/Y',strtotime( "+6 month", strtotime( $start ) ));
             }
-            else{
-                $pending=$pending.'|'.date('m/Y',strtotime($roomRent->from))." to ".date('m/Y',strtotime( "+5 month", strtotime( $roomRent->from ) ));
-            }
-        }*/
+        }
         //end calculate room rent pending
 
         //calculate mess fee pending
         $mess_pending="";
 
         $start=date('Y-m-d',strtotime($hosteller->admission_date));
-
-        while(date('m/Y',strtotime($start))-date('m/Y',strtotime($messFees->first()->month_year))>0){
-            $mess_pending=$mess_pending.', '.date('m/Y',strtotime($start));
-            $start=date('m/d/Y',strtotime( "+1 month", strtotime( $start ) ));
-        }
-
-        $today=date(\Carbon\Carbon::now());
-        $i=0;
-        foreach($messFees as $messFee)
-            $mess[$i++]=$messFee->month_year;
-        
-        $j=0;
-
-        for(;date('m/Y',strtotime($start))<=date('m/Y',strtotime($today));)
+        if($messFees->first())
         {
-            if($j<$i)
+
+
+            while(date('m/Y',strtotime($start))-date('m/Y',strtotime($messFees->first()->month_year))>0){
+                $mess_pending=$mess_pending.', '.date('m/Y',strtotime($start));
+                $start=date('m/d/Y',strtotime( "+1 month", strtotime( $start ) ));
+            }
+
+            $i=0;
+            foreach($messFees as $messFee)
+                $mess[$i++]=$messFee->month_year;
+            
+            $j=0;
+
+            for(;date('m/Y',strtotime($start))<=date('m/Y',strtotime($today));)
             {
-                if(date('m/Y',strtotime($start))==date('m/Y',strtotime($mess[$j])))
+                if($j<$i)
                 {
-                    $j++;
-                    $start=date('m/d/Y',strtotime( "+1 month", strtotime( $start ) ));
+                    if(date('m/Y',strtotime($start))==date('m/Y',strtotime($mess[$j])))
+                    {
+                        $j++;
+                        $start=date('m/d/Y',strtotime( "+1 month", strtotime( $start ) ));
+                    }
+                    else
+                    {
+                        $mess_pending=$mess_pending.', '.date('m/Y',strtotime($start));
+                        $start=date('m/d/Y',strtotime( "+1 month", strtotime( $start ) ));
+                    }
                 }
-                else
-                {
-                    $mess_pending=$mess_pending.', '.date('m/Y',strtotime($start));
-                    $start=date('m/d/Y',strtotime( "+1 month", strtotime( $start ) ));
-                }
+            }
+        }
+        else{
+            for(;date('m/Y',strtotime($start))<=date('m/Y',strtotime($today));)
+            {
+                $mess_pending=$mess_pending.date('m/Y',strtotime($start)).', ';
+                $start=date('m/d/Y',strtotime( "+1 month", strtotime( $start ) ));
+
             }
         }
         //end calculate mess fee pending
@@ -166,6 +194,7 @@ class DischargeController extends Controller
         return view('hms.discharges.show')->withHosteller($hosteller)
                                             ->with('admitFees',$admitFees)
                                             ->with('roomRents',$roomRents)
+                                            ->with('admit_pending',$admit_pending)
                                             ->with('messFees',$messFees)
                                             ->withPending($pending)
                                             ->with('mess_pending',$mess_pending);

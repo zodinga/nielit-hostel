@@ -35,6 +35,7 @@
 				@endforeach
 			</tbody>
 		</table>
+		<b class="text-danger">{{$admit_pending}}</b>
 	</div>
 
 	<div class="col-md-5">
