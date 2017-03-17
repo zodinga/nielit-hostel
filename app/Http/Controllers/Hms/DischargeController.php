@@ -81,6 +81,7 @@ class DischargeController extends Controller
 
             $start = date('Y-m-d',$time);
         }
+        
         $pending="";
         echo "<br>Start:",date('m/Y',strtotime($start));
         while(date('m/Y',strtotime($start))-date('m/Y',strtotime($roomRents->first()->from))>0){
