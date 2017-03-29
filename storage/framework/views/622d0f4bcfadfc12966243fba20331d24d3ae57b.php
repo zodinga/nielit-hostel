@@ -6,16 +6,19 @@
     <link rel="icon" type="image/ico" href="/images/hostel5.png"/>
 
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>HMS @yield('title')</title>
+    <title>HMS <?php echo $__env->yieldContent('title'); ?></title>
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
 
-{{Html::style('css/bootstrap.min.css')}}
+<?php echo e(Html::style('css/bootstrap.min.css')); ?>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-{{Html::style('css/styles.css')}}
-  {!! Html::style('font-awesome/css/font-awesome.css') !!}
-@yield('stylesheet')
+<?php echo e(Html::style('css/styles.css')); ?>
+
+  <?php echo Html::style('font-awesome/css/font-awesome.css'); ?>
+
+<?php echo $__env->yieldContent('stylesheet'); ?>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

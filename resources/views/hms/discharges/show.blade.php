@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="row">
-	<div class="col-md-4">
+	<div class="col-md-12">
 		<h1>Show</h1>
 		<h3>Name: {{$hosteller->name}}</h3>
 		<h4>Admitted on: {{date('d M, Y',strtotime($hosteller->admission_date))}}</h4>
@@ -76,13 +76,13 @@
 				<th>Remarks</th>
 			</thead>
 			<tbody>
-				@foreach($roomRents as $roomRent)
+				@foreach($messFees as $messFee)
 					<tr>
-						<td>{{date('d/m/y',strtotime($roomRent->date))}}</td>
-						<td>{{$roomRent->receipt_no}}</td>
-						<td>{{date('M/Y',strtotime($roomRent->date))}}</td>
-						<td>{{$roomRent->amount}}</td>
-						<td>{{$roomRent->remarks}}</td>
+						<td>{{date('d/m/y',strtotime($messFee->date))}}</td>
+						<td>{{$messFee->receipt_no}}</td>
+						<td>{{date('M/Y',strtotime($messFee->month_year))}}</td>
+						<td>{{$messFee->amount}}</td>
+						<td>{{$messFee->remarks}}</td>
 					</tr>
 				@endforeach
 			</tbody>

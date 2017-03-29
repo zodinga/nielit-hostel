@@ -35,7 +35,7 @@
               </ul>
           </li>
           
-          <li class="{{ Request::is('exports')?"active":"" }}"><a href="#">Exports</a></li>
+          <li class="{{ Request::is('reports')?"active":"" }}"><a href="{{route('reports.index')}}">Reports</a></li>
 
           <li class="{{ Request::is('users')?"active":"" }}"><a href="{{route('users.index')}}">Users</a></li>
           

@@ -26,7 +26,7 @@
 						<td>{{$roomRent->receipt_no}}</td>
 						<td>{{date('M, Y',strtotime($roomRent->from))}}</td>
 						<td>{{date('M, Y',strtotime($roomRent->to))}}</td>
-						<td>{{$roomRent->amount}}</td>
+						<td><i class="fa fa-rupee" aria-hidden="true"></i> {{$roomRent->amount}}</td>
 						<td>{{$roomRent->remarks}}</td>
 						<td><img src="/images/paid.png" alt="..." height="8%" ></td>
 					</tr>
@@ -52,9 +52,12 @@
 
 					{{Form::label('to')}}
 					<input class="form-control" data-parsley-required="" name="to" type="month" id="to">
-
+					
 					{{Form::label('amount')}}
-					{{Form::number('amount',null,['class'=>'form-control','data-parsley-required'=>''])}}
+					<div class="input-group">
+						<span class="input-group-addon" id="sizing-addon2"><i class="fa fa-rupee" aria-hidden="true"></i></span>
+						{{Form::number('amount',null,['class'=>'form-control','data-parsley-required'=>''])}}
+					</div>
 
 					{{Form::label('remarks')}}
 					{{Form::text('remarks',null,['class'=>'form-control'])}}

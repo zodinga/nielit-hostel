@@ -8,7 +8,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div class="well">
-				{!!Form::open(['route'=>'hostellers.store','data-parsley-validate'=>'','method'=>'POST'])!!}
+				{!!Form::open(['route'=>'admissions.store','data-parsley-validate'=>'','method'=>'POST'])!!}
 					<h2>New Admission</h2>
 					{{Form::label('building')}}
 					{{Form::select('building', ['Boys'=>'Boys', 'Girls'=>'Girls'], $sex=='M'?'Boys':'Girls', ['id'=>'building','placeholder' => 'Pick a building...','class'=>'form-control','data-parsley-required'=>''])}}
@@ -16,7 +16,6 @@
 					{{Form::label('room')}}
 					{{Form::select('room', $room_vacant, null, ['id'=>'room','placeholder' => 'Pick a room...','class'=>'form-control','autofocus','data-parsley-required'=>''])}}
 
-					{{Form::label('student_id')}}
 					{{Form::hidden('student_id',$student->id,['class'=>'form-control','data-parsley-required'=>''])}}
 
 					{{Form::label('name')}}
@@ -39,7 +38,7 @@
 					{{Form::date('admission_date',null,['class'=>'form-control','data-parsley-required'=>''])}}
 					
 					{{Form::label('remarks')}}
-					{{Form::text('remarks',$student->guardian_phone,['class'=>'form-control'])}}
+					{{Form::text('remarks',null,['class'=>'form-control'])}}
 					
 					{{Form::submit('Save',['class'=>'btn btn-primary btn-block form-spacing-top'])}}
 				{!! Form::close()!!}

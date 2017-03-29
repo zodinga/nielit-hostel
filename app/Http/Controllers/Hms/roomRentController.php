@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\hmsModel\Hosteller;
+use App\Course;
 use App\hmsModel\roomRent;
 use App\hmsModel\Account;
 use Session;
@@ -21,6 +22,28 @@ class roomRentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     public function search(Request $request)
+    {
+        
+        $hostellers=Hosteller::where('id','>',0);
+        if($request->has('name'))
+            $hostellers=$hostellers->where('name','like','%'.$request->name.'%');
+        if($request->has('course_id'))
+        {
+            $hostellers=$hostellers->where('course_id','=',$request->course_id);
+        }
+        if($request->has('year'))
+            $hostellers=$hostellers->where('doj','=',$request->year);
+
+        $hostellers=$hostellers->orderBy('id','desc')->paginate(8);
+
+        $courses=Course::pluck('name','id');
+        return view('hms.roomRents.index')
+                    ->withCourses($courses)
+                    ->withHostellers($hostellers);
+    }
+
     public function index()
     {
         $hostellers=Hosteller::where('leave_date','=',NULL)->orWhere('status','=',1)->paginate(10);

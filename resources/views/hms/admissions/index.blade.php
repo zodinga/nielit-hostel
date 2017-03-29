@@ -18,8 +18,11 @@
 			        <div class="form-group">
 			          <input type="text" id="name" name="name" class="form-control form-spacing-top" placeholder="Name">
 			        </div>
-			        <button type="submit" class="btn btn-success form-spacing-top">Search</button>
+			        <button type="submit" class="btn btn-success form-spacing-top"><i class="fa fa-search" aria-hidden="true"></i></button>
 				{!!Form::close()!!}
+	</div>
+	<div class="col-md-4">
+		<a href="{{route('hostellers.create')}}" class="btn btn-primary btn-lg form-spacing-top">New Admission</a>
 	</div>
 </div>
 <div class="row">

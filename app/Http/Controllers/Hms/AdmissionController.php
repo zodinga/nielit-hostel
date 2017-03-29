@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Student;
 use App\Course;
 use App\hmsModel\Room;
+use App\hmsModel\Hosteller;
 use Session;
 
 class AdmissionController extends Controller
@@ -33,7 +34,7 @@ class AdmissionController extends Controller
         $students=$students->orderBy('id','desc')->paginate(8);
 
         $courses=Course::pluck('name','id');
-        return view('sms.students.index')
+        return view('hms.admissions.index')
                     ->withCourses($courses)
                     ->withStudents($students);
     }
@@ -97,7 +98,44 @@ class AdmissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dd($request);
+        $this->validate($request,array(
+            'building'=>'required',
+            'room'=>'required|numeric',
+            'student_id'=>'required|numeric',
+            'course_id'=>'required|numeric',
+            'phone'=>'required',
+            'guardian'=>'required',
+            'guardian_phone'=>'required',
+            'admission_date'=>'required|date',
+            ));
+
+        
+        $hosteller=new Hosteller;
+        $hosteller->student_id=$request->student_id;
+        $hosteller->name=$request->name;
+        $hosteller->course_id=$request->course_id;
+        $hosteller->phone=$request->phone;
+        $hosteller->guardian=$request->guardian;
+        $hosteller->guardian_phone=$request->guardian_phone;
+        $hosteller->admission_date=$request->admission_date;
+        $hosteller->status=1;
+        $hosteller->remarks=$request->remarks;
+
+        $hosteller->save();
+
+        $hosteller=Hosteller::where('student_id','=',$request->student_id)->first();
+        $room=Room::find($request->room);
+        if($room->hosteller_1_id<1)
+            $room->hosteller_1_id=$hosteller->id;
+        else if($room->hosteller_2_id<1)
+            $room->hosteller_2_id=$hosteller->id;
+
+        $room->save();
+
+        Session::flash('success',$request->name.' Admitted');
+
+        return redirect()->route('admissions');
     }
 
     /**

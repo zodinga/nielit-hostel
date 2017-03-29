@@ -13,11 +13,11 @@
 	</div>
 	<div class="col-md-6">
 	
-				{!!Form::open(['route'=>'hms.students.search','method'=>'get','class'=>'navbar-form navbar-left'])!!}
+				{!!Form::open(['route'=>'hms.admitFee.search','method'=>'get','class'=>'navbar-form navbar-left'])!!}
 			        <div class="form-group">
 			          <input type="text" id="name" name="name" class="form-control form-spacing-top" placeholder="Name">
 			        </div>
-			        <button type="submit" class="btn btn-success form-spacing-top">Search</button>
+			        <button type="submit" class="btn btn-success form-spacing-top"><i class="fa fa-search" aria-hidden="true"></i></button>
 				{!!Form::close()!!}
 	</div>
 </div>
@@ -74,8 +74,10 @@
 										{{Form::text('receipt_no',null,['class'=>'form-control'])}}
 
 										{{Form::label('amount')}}
+										<div class="input-group">
+										 <span class="input-group-addon" id="sizing-addon2"><i class="fa fa-rupee" aria-hidden="true"></i></span>
 										{{Form::number('amount',null,['class'=>'form-control','data-parsley-required'=>''])}}
-
+										</div>
 										{{Form::label('remarks')}}
 										{{Form::text('remarks',null,['class'=>'form-control'])}}
 										

@@ -8,7 +8,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\hmsModel\Room;
 use App\hmsModel\Hosteller;
+use App\Course;
 use Session;
+use Schema;
 
 class HostellerController extends Controller
 {
@@ -32,7 +34,24 @@ class HostellerController extends Controller
      */
     public function create()
     {
-        //
+        //dd(Schema::getColumnListing('hostellers'));
+        $courses=Course::pluck('name','id');
+        
+        $rooms=Room::where('building','=','Boys')->get();  
+        $grooms=Room::where('building','=','Girls')->get(); 
+
+        $room_vacant=Room::where('building','=','Boys');
+        $room_vacant=$room_vacant->where(function ($query) {
+                $query->where('hosteller_1_id','=',0)
+                      ->orWhere('hosteller_2_id','=',0);
+            });
+        $room_vacant=$room_vacant->orderby('id')->pluck('room_no','id');
+
+        return view('hms.hostellers.create')
+                    ->withCourses($courses)
+                    ->withRoom_vacant($room_vacant)
+                    ->withRooms($rooms)
+                    ->withGrooms($grooms);
     }
 
     /**
@@ -43,11 +62,9 @@ class HostellerController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request);
         $this->validate($request,array(
             'building'=>'required',
             'room'=>'required|numeric',
-            'student_id'=>'required|numeric',
             'course_id'=>'required|numeric',
             'phone'=>'required',
             'guardian'=>'required',
@@ -57,7 +74,6 @@ class HostellerController extends Controller
 
         
         $hosteller=new Hosteller;
-        $hosteller->student_id=$request->student_id;
         $hosteller->name=$request->name;
         $hosteller->course_id=$request->course_id;
         $hosteller->phone=$request->phone;
@@ -69,7 +85,7 @@ class HostellerController extends Controller
 
         $hosteller->save();
 
-        $hosteller=Hosteller::where('student_id','=',$request->student_id)->first();
+        $hosteller=Hosteller::orderby('id','desc')->first();
         $room=Room::find($request->room);
         if($room->hosteller_1_id<1)
             $room->hosteller_1_id=$hosteller->id;
@@ -91,7 +107,9 @@ class HostellerController extends Controller
      */
     public function show($id)
     {
-        //
+        $hosteller=Hosteller::find($id);
+
+        return view('hms.hostellers.show')->withHosteller($hosteller);
     }
 
     /**

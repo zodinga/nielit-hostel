@@ -8,7 +8,7 @@
 		<div class="col-md-9">
 			<h2>Mess Account</h2>
 			<table class="table">
-			<caption><b class="text-success">Total Income: {{$income}}</b> | <b class="text-danger">Total Expense: {{$expense}}</b> | <b class="text-primary">Balance: {{$income-$expense}}</b></caption>
+			<caption><b class="text-success">Total Income: <i class="fa fa-rupee" aria-hidden="true"></i> {{$income}}</b> | <b class="text-danger">Total Expense: <i class="fa fa-rupee" aria-hidden="true"></i> {{$expense}}</b> | <b class="text-primary">Balance: <i class="fa fa-rupee" aria-hidden="true"></i> {{$income-$expense}}</b></caption>
 				<thead>
 					<tr>
 						<th>#</th>
@@ -23,8 +23,8 @@
 					<tr>
 						<td>{{$messAccount->id}}</td>
 						<td>{{date('d M, Y, D',strtotime($messAccount->date))}}</td>
-						<td class="text-success">{{$messAccount->income}}</td>
-						<td class="text-danger">{{$messAccount->expense}}</td>
+						<td class="text-success"><i class="fa fa-rupee" aria-hidden="true"></i> {{$messAccount->income}}</td>
+						<td class="text-danger"><i class="fa fa-rupee" aria-hidden="true"></i> {{$messAccount->expense}}</td>
 						<td>{{$messAccount->narration}}</td>
 					</tr>
 				@endforeach
@@ -41,7 +41,10 @@
 					{{Form::date('date',\Carbon\Carbon::now(),['class'=>'form-control','data-parsley-required'=>''])}}
 					
 					{{Form::label('amount')}}
-					{{Form::number('amount',null,['class'=>'form-control','data-parsley-required'=>''])}}
+					<div class="input-group">
+						<span class="input-group-addon" id="sizing-addon2"><i class="fa fa-rupee" aria-hidden="true"></i></span>
+						{{Form::number('amount',null,['class'=>'form-control','data-parsley-required'=>''])}}
+					</div>
 
 					{{Form::label('narration')}}
 					{{Form::text('narration',null,['class'=>'form-control','data-parsley-required'=>''])}}

@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
     {
         //redirect to login
         if ( $e instanceof \Illuminate\Session\TokenMismatchException ) {
-            dd('redirecting to login');
+            //dd('redirecting to login');
             return redirect()->route('login');
         }
         //redirect to login

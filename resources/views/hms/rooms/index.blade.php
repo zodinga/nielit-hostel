@@ -30,14 +30,14 @@
 						<td>{{$room->beds}}</td>
 						<td>
 							@if($room->hosteller_1)
-								{{$room->hosteller_1->name}}
+								<a href="{{route('hostellers.show',$room->hosteller_1->id)}}">{{$room->hosteller_1->name}}</a>
 							@else
 								<b>---</b>
 							@endif
 						</td>
 						<td>
 							@if($room->hosteller_2)
-								{{$room->hosteller_2->name}}
+								<a href="{{route('hostellers.show',$room->hosteller_2->id)}}">{{$room->hosteller_2->name}}</a>
 							@else
 								<b>---</b>
 							@endif

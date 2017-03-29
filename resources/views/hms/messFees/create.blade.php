@@ -24,7 +24,7 @@
 						<td>{{date('d M, Y, D',strtotime($messFee->date))}}</td>
 						<td>{{$messFee->receipt_no}}</td>
 						<td>{{date('M, Y',strtotime($messFee->month_year))}}</td>
-						<td>{{$messFee->amount}}</td>
+						<td><i class="fa fa-rupee" aria-hidden="true"></i> {{$messFee->amount}}</td>
 						<td>{{$messFee->remarks}}</td>
 						<td><img src="/images/paid.png" alt="..." height="8%" ></td>
 					</tr>
@@ -49,7 +49,10 @@
 					<input class="form-control" data-parsley-required="" name="month_year" type="month" id="month_year">
 
 					{{Form::label('amount')}}
-					{{Form::number('amount',null,['class'=>'form-control','data-parsley-required'=>''])}}
+					<div class="input-group">
+						<span class="input-group-addon" id="sizing-addon2"><i class="fa fa-rupee" aria-hidden="true"></i></span>
+						{{Form::number('amount',null,['class'=>'form-control','data-parsley-required'=>''])}}
+					</div>
 
 					{{Form::label('remarks')}}
 					{{Form::text('remarks',null,['class'=>'form-control'])}}

@@ -13,11 +13,11 @@
 	</div>
 	<div class="col-md-6">
 	
-				{!!Form::open(['route'=>'hms.students.search','method'=>'get','class'=>'navbar-form navbar-left'])!!}
+				{!!Form::open(['route'=>'hms.messFee.search','method'=>'get','class'=>'navbar-form navbar-left'])!!}
 			        <div class="form-group">
 			          <input type="text" id="name" name="name" class="form-control form-spacing-top" placeholder="Name">
 			        </div>
-			        <button type="submit" class="btn btn-success form-spacing-top">Search</button>
+			        <button type="submit" class="btn btn-success form-spacing-top"><i class="fa fa-search" aria-hidden="true"></i></button>
 				{!!Form::close()!!}
 	</div>
 </div>

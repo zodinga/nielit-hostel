@@ -55,7 +55,7 @@ Route::group(['middlewareGroups'=>['web']],function(){
 
 	//HOSTEL MGT SYSTEM
 	//SEARCH
-	Route::get('hostel/search', ['uses'=>'Hms\AdmissionController@search','as'=>'hms.students.search','middleware'=>'roles','roles'=>['Reception','Admin','Warden']
+	Route::get('students/search', ['uses'=>'Hms\AdmissionController@search','as'=>'hms.students.search','middleware'=>'roles','roles'=>['Reception','Admin','Warden']
 		]);
 	//END SEARCH
 	//ADMISSION
@@ -68,6 +68,10 @@ Route::group(['middlewareGroups'=>['web']],function(){
 	Route::get('hostellers',['as'=>'hostellers.index','uses'=>'Hms\HostellerController@index','middleware'=>'roles','roles'=>['Admin','Warden']]);
 	Route::get('hostellers/create',['as'=>'hostellers.create','uses'=>'Hms\HostellerController@create','middleware' => 'roles','roles' => ['Admin','Warden']]);
 	Route::post('hostellers/create',['as'=>'hostellers.store','uses'=>'Hms\HostellerController@store','middleware' => 'roles','roles' => ['Admin','Warden']]);
+
+	Route::get('hostellers/new',['as'=>'hostellers.new','uses'=>'Hms\HostellerController@new','middleware' => 'roles','roles' => ['Admin','Warden']]);
+	Route::post('hostellers/new',['as'=>'hostellers.save','uses'=>'Hms\HostellerController@save','middleware' => 'roles','roles' => ['Admin','Warden']]);
+
 	Route::get('hostellers/{id}',['as'=>'hostellers.show','uses'=>'Hms\HostellerController@show','middleware'=>'roles','roles'=>['Admin','Warden']]);
 	Route::get('hostellers/{id}/edit',['as'=>'hostellers.edit','uses'=>'Hms\HostellerController@edit','middleware' => 'roles','roles' => ['Admin','Warden']]);
 	Route::put('hostellers/{id}',['as'=>'hostellers.update','uses'=>'Hms\HostellerController@update','middleware' => 'roles','roles' => ['Admin','Warden']]);
@@ -85,9 +89,7 @@ Route::group(['middlewareGroups'=>['web']],function(){
 	//END ROOM
 
 	Route::get('/ajax-room',function(){
-		//dd('ajax');
 		$id=Input::get('id');
-		//dd(Input::get('id'));
 		$rooms=Room::where('building','=',$id)->get();
 		return Response::json($rooms);
 	});
@@ -100,6 +102,9 @@ Route::group(['middlewareGroups'=>['web']],function(){
 	Route::get('admitFee/{id}/edit',['as'=>'admitFee.edit','uses'=>'Hms\admitFeeController@edit','middleware' => 'roles','roles' => ['Admin','Warden']]);
 	Route::put('admitFee/{id}',['as'=>'admitFee.update','uses'=>'Hms\admitFeeController@update','middleware' => 'roles','roles' => ['Admin','Warden']]);
 	Route::delete('admitFee/{id}',['as'=>'admitFee.destroy','uses'=>'Hms\admitFeeController@destroy','middleware' => 'roles','roles' => ['Admin','Warden']]);
+	//SEARCH
+	Route::get('searchAdmit',['uses'=>'Hms\admitFeeController@search','as'=>'hms.admitFee.search','middleware'=>'roles','roles'=>['Reception','Admin','Warden']]);
+	//END SEARCH
 	//END ADMIT FEE
 
 	//ROOM RENT
@@ -110,6 +115,10 @@ Route::group(['middlewareGroups'=>['web']],function(){
 	Route::get('roomRent/{id}/edit',['as'=>'roomRent.edit','uses'=>'Hms\roomRentController@edit','middleware' => 'roles','roles' => ['Admin','Warden']]);
 	Route::put('roomRent/{id}',['as'=>'roomRent.update','uses'=>'Hms\roomRentController@update','middleware' => 'roles','roles' => ['Admin','Warden']]);
 	Route::delete('roomRent/{id}',['as'=>'roomRent.destroy','uses'=>'Hms\roomRentController@destroy','middleware' => 'roles','roles' => ['Admin','Warden']]);
+	//SEARCH
+	Route::get('searchRent', ['uses'=>'Hms\roomRentController@search','as'=>'hms.roomRent.search','middleware'=>'roles','roles'=>['Reception','Admin','Warden']
+		]);
+	//END SEARCH
 	//END ROOM RENT
 
 	//MESS FEE
@@ -120,6 +129,10 @@ Route::group(['middlewareGroups'=>['web']],function(){
 	Route::get('messFee/{id}/edit',['as'=>'messFee.edit','uses'=>'Hms\messFeeController@edit','middleware' => 'roles','roles' => ['Admin','Warden']]);
 	Route::put('messFee/{id}',['as'=>'messFee.update','uses'=>'Hms\messFeeController@update','middleware' => 'roles','roles' => ['Admin','Warden']]);
 	Route::delete('messFee/{id}',['as'=>'messFee.destroy','uses'=>'Hms\messFeeController@destroy','middleware' => 'roles','roles' => ['Admin','Warden']]);
+	//SEARCH
+	Route::get('searchMess', ['uses'=>'Hms\messFeeController@search','as'=>'hms.messFee.search','middleware'=>'roles','roles'=>['Reception','Admin','Warden']
+		]);
+	//END SEARCH
 	//END MESS FEE
 
 	//ACCOUNT
@@ -151,6 +164,12 @@ Route::group(['middlewareGroups'=>['web']],function(){
 	Route::put('discharge/{id}',['as'=>'discharge.update','uses'=>'Hms\DischargeController@update','middleware' => 'roles','roles' => ['Admin','Warden']]);
 	Route::delete('discharge/{id}',['as'=>'discharge.destroy','uses'=>'Hms\DischargeController@destroy','middleware' => 'roles','roles' => ['Admin','Warden']]);
 	//END DISCHARGE
+
+	//REPORTS
+	Route::get('reports',['as'=>'reports.index','uses'=>'Hms\ReportController@index','middleware'=>'roles','roles'=>['Admin','Warden']]);
+	Route::get('reports/custom',['as'=>'reports.custom','uses'=>'Hms\ReportController@custom','middleware'=>'roles','roles'=>['Admin','Warden']]);
+	Route::post('reports/custom',['as'=>'reports.custom_export','uses'=>'Hms\ReportController@custom_export','middleware'=>'roles','roles'=>['Admin','Warden']]);
+	//END REPORTS
 
 	
 	//END HOSTEL MGT SYSTEM
